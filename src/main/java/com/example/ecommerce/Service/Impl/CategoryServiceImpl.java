@@ -13,6 +13,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     public CategoryRepo categoryRepo;
+
     @Override
     public CategoryEntity saveCategory(CategoryEntity categoryEntity) {
         return categoryRepo.save(categoryEntity);
@@ -20,7 +21,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Boolean existCategory(String name) {
-        return null;
+        return categoryRepo.existsByName(name);
     }
 
     @Override
