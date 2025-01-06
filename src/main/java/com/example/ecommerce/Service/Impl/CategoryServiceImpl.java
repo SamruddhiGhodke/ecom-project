@@ -5,6 +5,7 @@ import com.example.ecommerce.Repository.CategoryRepo;
 import com.example.ecommerce.Service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -27,5 +28,28 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryEntity> getAllCategory() {
         return categoryRepo.findAll();
+    }
+
+    @Override
+    public Boolean deleteCategory(int id) {
+        CategoryEntity categoryEntity = categoryRepo.findById(id).orElse(null);
+        if(!ObjectUtils.isEmpty(categoryEntity)){
+             categoryRepo.delete(categoryEntity);
+             return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public CategoryEntity getCategoryById(int id) {
+        CategoryEntity category=categoryRepo.findById(id).orElse(null);
+        return category;
+    }
+
+    @Override
+    public List<CategoryEntity> getAllActiveCategory() {
+        List<CategoryEntity> categoryEntities=categoryRepo.findByIsActiveTrue();
+        return categoryEntities;
     }
 }
