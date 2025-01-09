@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -35,12 +36,23 @@ public class HomeController {
     @Autowired
     public UserService userService;
 
+    @ModelAttribute
+    public void getUserDetails(Principal p, Model m){
+        if(p!=null){
+            String email = p.getName();
+            UserDetailsEntity userDetails=userService.getUserByEmail(email);
+            m.addAttribute("user", userDetails);
+        }
+        List<CategoryEntity> allActiveCategory=categoryService.getAllActiveCategory();
+        m.addAttribute("categorys", allActiveCategory);
+    }
+
     @GetMapping("/")
     public String home(){
         return "index";
     }
 
-    @GetMapping("/login")
+    @GetMapping("/signin")
     public String login(){
         return "login";
     }

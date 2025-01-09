@@ -27,5 +27,7 @@ public class UserDetailsEntity {
     private String pincode;
     private String password;
     private String profileImage;
+    private String role;
+    private Boolean isEnable;
 
 }

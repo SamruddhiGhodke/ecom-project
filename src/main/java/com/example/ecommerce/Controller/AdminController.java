@@ -3,8 +3,10 @@ package com.example.ecommerce.Controller;
 import com.example.ecommerce.Entity.CategoryEntity;
 //import com.example.ecommerce.Service.CategoryService;
 import com.example.ecommerce.Entity.ProductEntity;
+import com.example.ecommerce.Entity.UserDetailsEntity;
 import com.example.ecommerce.Service.CategoryService;
 import com.example.ecommerce.Service.ProductService;
+import com.example.ecommerce.Service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -19,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.Principal;
 import java.util.List;
 
 
@@ -32,9 +35,23 @@ public class AdminController {
     @Autowired
     public ProductService productService;
 
+    @Autowired
+    public UserService userService;
+
     @GetMapping("/")
     public String index(){
         return "admin/index";
+    }
+
+    @ModelAttribute
+    public void getUserDetails(Principal p, Model m){
+        if(p!=null){
+            String email = p.getName();
+            UserDetailsEntity userDetails=userService.getUserByEmail(email);
+            m.addAttribute("user", userDetails);
+        }
+        List<CategoryEntity> allActiveCategory=categoryService.getAllActiveCategory();
+        m.addAttribute("categorys", allActiveCategory);
     }
 
     @GetMapping("/addProduct")
@@ -187,6 +204,25 @@ public class AdminController {
         }
             return "redirect:/admin/editProduct/" + productEntity.getId();
 
+    }
+
+    @GetMapping("/users")
+    public String getAllUsers(Model m){
+        List<UserDetailsEntity> users=userService.getUsers("ROLE_USER");
+        m.addAttribute("users", users);
+        return "/admin/users";
+
+    }
+    @GetMapping("/updateSts")
+    public String updateUserAccountStatus(@RequestParam Boolean status, @RequestParam Integer id, HttpSession session){
+        Boolean update=userService.updateUserStatus(id, status);
+        if (update) {
+            session.setAttribute("succMsg", "Account Status updated");
+        }
+        else{
+            session.setAttribute("errorMsg", "something wrong on server");
+        }
+        return "redirect:/admin/users";
     }
 
 
