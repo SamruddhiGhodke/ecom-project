@@ -13,4 +13,18 @@ public interface UserService {
     public List<UserDetailsEntity>getUsers(String role);
 
     public Boolean updateUserStatus(Integer id, Boolean status);
+
+    public void increaseFailedAttempts(UserDetailsEntity userDetails);
+
+    public void userAccountLock(UserDetailsEntity userDetails);
+
+    public boolean unlockAccountTimeExpired(UserDetailsEntity userDetails);
+
+    public void resetAttempts(int userId);
+
+    public void updateUserResetToken(String email, String resetToken);
+
+    public UserDetailsEntity getUsersByToken(String token);
+
+    public UserDetailsEntity updateUser(UserDetailsEntity userDetails);
 }

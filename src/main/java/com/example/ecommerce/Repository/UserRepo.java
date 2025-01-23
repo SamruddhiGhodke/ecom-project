@@ -13,4 +13,6 @@ public interface UserRepo extends JpaRepository<UserDetailsEntity, Integer> {
     public UserDetailsEntity findByEmail(String email) throws UsernameNotFoundException;
 
     public List<UserDetailsEntity> findByRole(String role);
+
+    public UserDetailsEntity findByResetToken(String token);
 }
