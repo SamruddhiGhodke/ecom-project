@@ -61,4 +61,9 @@ public class UserController {
         }
         return "redirect:/product/"+pid;
     }
+
+    @GetMapping("/cart")
+    public String loadCart(){
+        return "/user/cart";
+    }
 }

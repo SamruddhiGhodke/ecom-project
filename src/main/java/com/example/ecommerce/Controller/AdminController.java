@@ -4,6 +4,7 @@ import com.example.ecommerce.Entity.CategoryEntity;
 //import com.example.ecommerce.Service.CategoryService;
 import com.example.ecommerce.Entity.ProductEntity;
 import com.example.ecommerce.Entity.UserDetailsEntity;
+import com.example.ecommerce.Service.CartService;
 import com.example.ecommerce.Service.CategoryService;
 import com.example.ecommerce.Service.ProductService;
 import com.example.ecommerce.Service.UserService;
@@ -38,6 +39,9 @@ public class AdminController {
     @Autowired
     public UserService userService;
 
+    @Autowired
+    public CartService cartService;
+
     @GetMapping("/")
     public String index(){
         return "admin/index";
@@ -49,6 +53,8 @@ public class AdminController {
             String email = p.getName();
             UserDetailsEntity userDetails=userService.getUserByEmail(email);
             m.addAttribute("user", userDetails);
+            Integer countCart = cartService.getCountCart(userDetails.getId());
+            m.addAttribute("countCart", countCart);
         }
         List<CategoryEntity> allActiveCategory=categoryService.getAllActiveCategory();
         m.addAttribute("categorys", allActiveCategory);

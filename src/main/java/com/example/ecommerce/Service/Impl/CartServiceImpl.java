@@ -50,7 +50,13 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<CartEntity> getCartByUser(Integer userId) {
-        return List.of();
+        List<CartEntity> carts=cartRepo.findByUserDetailsEntityId(userId);
+        Double totalPrice=0.0;
+        for(CartEntity c:carts){
+            totalPrice = (c.getProductEntity().getDiscountPrice()*c.getQuantity())+totalPrice;
+
+        }
+        return carts;
     }
 
     @Override
